@@ -8,5 +8,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["api/**/*.ts", "fetch-image.ts"]
+  "include": ["api/**/*.ts"]
 }

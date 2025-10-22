@@ -1,0 +1,7 @@
+# Chave interna pra proteger o endpoint do frontend
+INTERNAL_API_KEY=EXEMPLO_API_KEY_12345
+
+# Credenciais do Google Cloud para gerar access_token
+GOOGLE_CLIENT_ID=1234567890-abcdefg.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=EXEMPLO_CLIENT_SECRET_123456
+GOOGLE_REFRESH_TOKEN=1//EXEMPLO_REFRESH_TOKEN_abcdefghijklmnop
