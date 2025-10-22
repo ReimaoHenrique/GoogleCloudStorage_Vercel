@@ -1,0 +1,127 @@
+Beleza, Henrique! Vou montar um **README completo, claro e direto**, explicando o microserviço `gcs-token-service`, como rodar local, `.env`, uso e até um exemplo de frontend. Vou deixar no estilo que devs entendem na hora e com placeholders seguros. 🔥
+
+---
+
+# GCS Token Service
+
+Microserviço para gerar tokens de acesso temporários para o **Google Cloud Storage**.
+Permite que o frontend ou outros serviços façam upload de arquivos direto no bucket sem expor credenciais do Google.
+
+---
+
+## 📦 Tecnologias
+
+- Node.js + TypeScript
+- Express
+- node-fetch
+- dotenv
+
+---
+
+## 🔑 Variáveis de Ambiente
+
+Crie um arquivo `.env` baseado no `.env.example`:
+
+```env
+# Chave interna para proteger o endpoint
+INTERNAL_API_KEY=EXEMPLO_API_KEY_12345
+
+# Credenciais do Google Cloud
+GOOGLE_CLIENT_ID=1234567890-abcdefg.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=EXEMPLO_CLIENT_SECRET_123456
+GOOGLE_REFRESH_TOKEN=1//EXEMPLO_REFRESH_TOKEN_abcdefghijklmnop
+```
+
+---
+
+## 🚀 Rodando local
+
+1. Instalar dependências:
+
+```bash
+pnpm install
+```
+
+2. Rodar o servidor em modo dev:
+
+```bash
+pnpm dev
+```
+
+3. O serviço estará disponível em:
+
+```
+http://localhost:3000/api/generate-token
+```
+
+---
+
+## ⚡ Uso do Endpoint
+
+### Requisição POST
+
+```bash
+curl -X POST http://localhost:3000/api/generate-token
+```
+
+### Resposta JSON
+
+```json
+{
+  "access_token": "ya29.a0AfH6SAMPLETOKEN...",
+  "expires_in": 3599
+}
+```
+
+---
+
+## 🖥 Exemplo Frontend
+
+```ts
+async function getToken() {
+  const res = await fetch("http://localhost:3000/api/generate-token", {
+    method: "POST",
+  });
+  const data = await res.json();
+  return data.access_token;
+}
+
+async function uploadFile(file: File) {
+  const token = await getToken();
+
+  const bucketName = "saas_ofcina";
+  const fileName = encodeURIComponent(file.name);
+  const url = `https://storage.googleapis.com/upload/storage/v1/b/${bucketName}/o?uploadType=media&name=${fileName}`;
+
+  const uploadRes = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": file.type,
+    },
+    body: file,
+  });
+
+  const result = await uploadRes.json();
+  console.log("Upload concluído:", result);
+}
+```
+
+---
+
+## ⚠️ Dicas
+
+- Proteja o endpoint com `INTERNAL_API_KEY` no header se for usar em produção.
+- Nunca comite `.env` com credenciais reais.
+- Refresh tokens do Google não expiram (exceto se revogados), mas o `access_token` dura ~1h.
+
+---
+
+Se tu quiser, Henrique, posso fazer a **versão ainda mais completa**, incluindo:
+
+- Estrutura do projeto (`index.ts`, `api/`)
+- `.env.example` pronto
+- Comandos de build e dev
+- Guia de como criar novos microserviços tipo `upload-service` ou `list-bucket-service`
+
+Quer que eu faça essa versão full?
